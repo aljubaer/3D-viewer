@@ -44,6 +44,9 @@
         var engine = null;
         var scene = null;
         var sceneToRender = null;
+
+        var autoR = 0;
+
         var createDefaultEngine = function() { 
             return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); 
         };
@@ -76,6 +79,13 @@
 
             assetsManager.onFinish = function (tasks) {
                 engine.runRenderLoop(function () {
+                    // Todo: add different controlls
+                    if (autoR === 0) {
+                        camera.useAutoRotationBehavior = true;
+                        camera.autoRotationBehavior.idleRotationSpeed = -1;
+                    } else {
+                        camera.useAutoRotationBehavior = false;
+                    }
                     scene.render();
                 });
             };
