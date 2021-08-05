@@ -1,127 +1,289 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+			crossorigin="anonymous"
+		/>
 
-        <title>Babylon.js sample code</title>
+		<link rel="stylesheet" href="style.css" />
+		<title>Document</title>
+	</head>
+	<body>
+		<div class="container p-4">
+			<h1 class="text-center font-weight-bold text-uppercase">
+				3D viewer Plagin
+			</h1>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8">
+					<div class="3d-viewer bg-danger">
+						<canvas
+							id="renderCanvas"
+							width="100%"
+							height="740"
+							style="width: 100%; height: 740px"
+						></canvas>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="configuration">
+						<div class="config-section-header">
+							<h6>Configuration</h6>
+						</div>
+						<div class="accordion" id="accordionExample">
+							<div class="accordion-item">
+								<h2 class="accordion-header" id="headingOne">
+									<button
+										class="accordion-button"
+										type="button"
+										data-bs-toggle="collapse"
+										data-bs-target="#collapseOne"
+										aria-expanded="true"
+										aria-controls="collapseOne"
+									>
+										Rotation
+									</button>
+								</h2>
+								<div
+									id="collapseOne"
+									class="accordion-collapse collapse show"
+									aria-labelledby="headingOne"
+									data-bs-parent="#accordionExample"
+								>
+									<div class="accordion-body">
+										<div class="row">
+											<div class="col-md-6">
+												<p>Autorotation</p>
+											</div>
+											<div class="col-md-6 d-flex justify-content-end ml-auto">
+												<div class="form-check form-switch">
+													<input
+														onchange="rotation()"
+														class="form-check-input"
+														type="checkbox"
+														id="flexSwitchCheckChecked"
+													/>
+												</div>
+											</div>
+										</div>
+										<div class="rotation_speed">
+											<p>Autorotation speed</p>
+											<input
+												type="range"
+												class="form-range"
+												value="1"
+												onChange="rotationSpeed()"
+												min="-2.5"
+												max="2.5"
+												step="0.5"
+												id="rotation_speed"
+											/>
+										</div>
+										<div class="rotation_top_limit">
+											<p>Rotation top limit</p>
+											<input
+												type="range"
+												class="form-range"
+												value="1.5"
+												onChange="rotationTopLimit()"
+												min="-1"
+												max="4"
+												step="0.5"
+												id="rotation_top_limit"
+											/>
+										</div>
+										<div class="rotation_bottom_limit">
+											<p>Rotation bottom limit</p>
+											<input
+												type="range"
+												class="form-range"
+												value="2.5"
+												onChange="rotationBottomLimit()"
+												min="0"
+												max="5"
+												step="0.5"
+												id="rotation_bottom_limit"
+											/>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="accordion-item">
+								<h2 class="accordion-header" id="headingTwo">
+									<button
+										class="accordion-button collapsed"
+										type="button"
+										data-bs-toggle="collapse"
+										data-bs-target="#collapseTwo"
+										aria-expanded="false"
+										aria-controls="collapseTwo"
+									>
+										Zoom
+									</button>
+								</h2>
+								<div
+									id="collapseTwo"
+									class="accordion-collapse collapse"
+									aria-labelledby="headingTwo"
+									data-bs-parent="#accordionExample"
+								>
+									<div class="accordion-body">
+										<div class="row">
+											<div class="col-md-6">
+												<p>Zoom enabled</p>
+											</div>
+											<div class="col-md-6 d-flex justify-content-end ml-auto">
+												<div class="form-check form-switch">
+													<input
+														class="form-check-input"
+														type="checkbox"
+														id="flexSwitchCheckChecked"
+													/>
+												</div>
+											</div>
+										</div>
+										<div class="zoom_in_limit">
+											<p>Zoom in limit</p>
+											<input
+												type="range"
+												class="form-range"
+												value="-0.5"
+												onChange="zoomInLimit()"
+												min="-1"
+												max="0"
+												step="0.1"
+												id="zoom_in_limit"
+											/>
+										</div>
+										<div class="zoom_out_limit">
+											<p>Zoom out limit</p>
+											<input
+												type="range"
+												class="form-range"
+												value="0.5"
+												onChange="zoomOutLimit()"
+												min="0"
+												max="1"
+												step="0.1"
+												id="zoom_out_limit"
+											/>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="accordion-item">
+								<h2 class="accordion-header" id="headingTwo">
+									<button
+										class="accordion-button collapsed"
+										type="button"
+										data-bs-toggle="collapse"
+										data-bs-target="#collapseForShadow"
+										aria-expanded="false"
+										aria-controls="collapseForShadow"
+									>
+										Shadow
+									</button>
+								</h2>
+								<div
+									id="collapseForShadow"
+									class="accordion-collapse collapse"
+									aria-labelledby="headingTwo"
+									data-bs-parent="#accordionExample"
+								>
+									<div class="accordion-body">
+										<div class="row">
+											<div class="col-md-6">
+												<p>Cast shadow</p>
+											</div>
+											<div class="col-md-6 d-flex justify-content-end ml-auto">
+												<div class="form-check form-switch">
+													<input
+														class="form-check-input"
+														type="checkbox"
+														id="flexSwitchCheckChecked"
+													/>
+												</div>
+											</div>
+										</div>
+										<div class="shadow_blur">
+											<p>Shadow blur</p>
+											<input
+												type="range"
+												class="form-range"
+												value="2"
+												min="0"
+												max="5"
+												step="0.5"
+												id="shadow_blur"
+											/>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="accordion-item">
+								<h2 class="accordion-header" id="headingThree">
+									<button
+										class="accordion-button collapsed"
+										type="button"
+										data-bs-toggle="collapse"
+										data-bs-target="#collapseThree"
+										aria-expanded="false"
+										aria-controls="collapseThree"
+									>
+										Background
+									</button>
+								</h2>
+								<div
+									id="collapseThree"
+									class="accordion-collapse collapse"
+									aria-labelledby="headingThree"
+									data-bs-parent="#accordionExample"
+								>
+									<div class="accordion-body">
+										<p>Background Color</p>
+										<div class="background_colors">
+											<div class="bc1 bg-info" onclick="backGround('sky')"></div>
+											<div class="bc2 bg-danger"></div>
+											<div class="bc3 bg-secondary"></div>
+											<div class="bc4 bg-primary"></div>
+											<div class="bc4 bg-success"></div>
+											<div class="bc4 bg-warning"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-        <!-- Babylon.js -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
-        <script src="https://preview.babylonjs.com/ammo.js"></script>
-        <script src="https://preview.babylonjs.com/cannon.js"></script>
-        <script src="https://preview.babylonjs.com/Oimo.js"></script>
-        <script src="https://preview.babylonjs.com/earcut.min.js"></script>
-        <script src="https://preview.babylonjs.com/babylon.js"></script>
-        <script src="https://preview.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
-        <script src="https://preview.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
-        <script src="https://preview.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
-        <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.js"></script>
-        <script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
-        <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
-        <script src="https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
-
-        <style>
-            html, body {
-                overflow: hidden;
-                width: 100%;
-                height: 100%;
-                margin: 0;
-                padding: 0;
-            }
-
-            #renderCanvas {
-                width: 100%;
-                height: 100%;
-                touch-action: none;
-            }
-        </style>
-    </head>
-<body>
-    <canvas id="renderCanvas"></canvas>
-    <script>
-        var canvas = document.getElementById("renderCanvas");
-
-        var engine = null;
-        var scene = null;
-        var sceneToRender = null;
-
-        var autoR = 0;
-
-        var createDefaultEngine = function() { 
-            return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); 
-        };
-        var createScene = function () {
-    
-            // Creates a basic Babylon Scene object (non-mesh)
-            var scene = new BABYLON.Scene(engine);
-
-            // Create a camera
-            var camera = new BABYLON.ArcRotateCamera("camera", 2.372, 1, 0.5, BABYLON.Vector3.Zero(), scene);
-            camera.upperRadiusLimit = 0.5;
-            camera.lowerRadiusLimit = 0.25;
-            camera.minZ = 0.01;
-
-            // Attaches the camera to the canvas
-            camera.attachControl(canvas, true);
-
-            // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
-            var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
-
-            // Use asset Manager to load the asset
-            var assetsManager = new BABYLON.AssetsManager(scene);
-            var meshTask = assetsManager.addMeshTask("shoe task", "", "https://assets.babylonjs.com/meshes/", "shoe_variants.glb");
-
-            meshTask.onSuccess = function (task) {
-                task.loadedMeshes[0].position = BABYLON.Vector3.Zero();
-                // scene.debugLayer.show({embedMode:true});
-                scene.debugLayer.select(task.loadedMeshes[0], "VARIANTS");
-            }	
-
-            assetsManager.onFinish = function (tasks) {
-                engine.runRenderLoop(function () {
-                    // Todo: add different controlls
-                    if (autoR === 0) {
-                        camera.useAutoRotationBehavior = true;
-                        camera.autoRotationBehavior.idleRotationSpeed = -1;
-                    } else {
-                        camera.useAutoRotationBehavior = false;
-                    }
-                    scene.render();
-                });
-            };
-            
-            assetsManager.load();
-
-            return scene;
-        };
-        window.initFunction = async function() {
-        
-            var asyncEngineCreation = async function() {
-                try {
-                    return createDefaultEngine();
-                } catch(e) {
-                    console.log("the available createEngine function failed. Creating the default engine instead");
-                return createDefaultEngine();
-                }
-            }
-
-            window.engine = await asyncEngineCreation();
-            if (!engine) throw 'engine should not be null.';
-            window.scene = createScene();
-        };
-        initFunction().then(() => {
-            sceneToRender = scene      
-            engine.runRenderLoop(function () {
-                if (sceneToRender && sceneToRender.activeCamera) {
-                    sceneToRender.render();
-                }
-            });
-        });
-
-        // Resize
-        window.addEventListener("resize", function () {
-            engine.resize();
-        });
-    </script>
-</body>
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+			crossorigin="anonymous"
+		></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
+		<script src="https://preview.babylonjs.com/ammo.js"></script>
+		<script src="https://preview.babylonjs.com/cannon.js"></script>
+		<script src="https://preview.babylonjs.com/Oimo.js"></script>
+		<script src="https://preview.babylonjs.com/earcut.min.js"></script>
+		<script src="https://preview.babylonjs.com/babylon.js"></script>
+		<script src="https://preview.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+		<script src="https://preview.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+		<script src="https://preview.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+		<script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+		<script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+		<script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
+		<script src="https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+		<script src="control.js"></script>
+		<script src="babylon.js"></script>
+	</body>
 </html>
