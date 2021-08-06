@@ -68,7 +68,8 @@
 														onchange="rotation()"
 														class="form-check-input"
 														type="checkbox"
-														id="flexSwitchCheckChecked"
+														id="autoRotationControl"
+														checked
 													/>
 												</div>
 											</div>
@@ -142,9 +143,11 @@
 											<div class="col-md-6 d-flex justify-content-end ml-auto">
 												<div class="form-check form-switch">
 													<input
+														onchange="zoom()"
 														class="form-check-input"
 														type="checkbox"
-														id="flexSwitchCheckChecked"
+														checked
+														id="zoomControl"
 													/>
 												</div>
 											</div>
@@ -154,11 +157,11 @@
 											<input
 												type="range"
 												class="form-range"
-												value="-0.5"
+												value="-1"
 												onChange="zoomInLimit()"
 												min="-1"
-												max="0"
-												step="0.1"
+												max="-0.1"
+												step="0.15"
 												id="zoom_in_limit"
 											/>
 										</div>
@@ -169,8 +172,8 @@
 												class="form-range"
 												value="0.5"
 												onChange="zoomOutLimit()"
-												min="0"
-												max="1"
+												min="0.5"
+												max="1.2"
 												step="0.1"
 												id="zoom_out_limit"
 											/>
@@ -207,7 +210,8 @@
 													<input
 														class="form-check-input"
 														type="checkbox"
-														id="flexSwitchCheckChecked"
+														checked
+														id="shadowControl"
 													/>
 												</div>
 											</div>
@@ -249,12 +253,30 @@
 									<div class="accordion-body">
 										<p>Background Color</p>
 										<div class="background_colors">
-											<div class="bc1 bg-info" onclick="backGround('sky')"></div>
-											<div class="bc2 bg-danger"></div>
-											<div class="bc3 bg-secondary"></div>
-											<div class="bc4 bg-primary"></div>
-											<div class="bc4 bg-success"></div>
-											<div class="bc4 bg-warning"></div>
+											<div
+												class="bc1 bg-info"
+												onclick="backGround('0.529', '0.808', '0.922')"
+											></div>
+											<div
+												class="bc2 bg-danger"
+												onclick="backGround('0.5', '0', '0')"
+											></div>
+											<div
+												class="bc3 bg-secondary"
+												onclick="backGround('0.502', '0.502', '0.502')"
+											></div>
+											<div
+												class="bc4 bg-primary"
+												onclick="backGround('0.255', '0.412', '0.882')"
+											></div>
+											<div
+												class="bc4 bg-success"
+												onclick="backGround('0.18', '0.545', '0.341')"
+											></div>
+											<div
+												class="bc4 bg-warning"
+												onclick="backGround('1', '1', '0.5')"
+											></div>
 										</div>
 									</div>
 								</div>

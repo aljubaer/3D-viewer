@@ -1,5 +1,5 @@
 .config-title {
-	color: #009fdb;
+	color: #fe6f61;
 	font-size: 17px;
 	font-weight: 500;
 	border-bottom: 1px solid #d8dee2;
@@ -30,12 +30,12 @@
 	margin: 2px;
 }
 button.accordion-button {
-	color: #009fdb;
+	color: #fe6f61;
 	font-weight: bold;
 }
 .accordion-button:not(.collapsed) {
-	color: #09ceff;
-	background-color: #d8f4fb;
+	color: #ff003c;
+	background-color: #ffe7e7;
 }
 @media (min-width: 1200px) {
 	.container {
