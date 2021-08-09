@@ -15,14 +15,14 @@ var createDefaultEngine = function () {
 
 //Custom Loading Scene
 BABYLON.DefaultLoadingScreen.prototype.displayLoadingUI = function () {
-	if (document.getElementById('customLoadingScreenDiv')) {
+	if (document.getElementById("customLoadingScreenDiv")) {
 		// Do not add a loading screen if there is already one
-		document.getElementById('customLoadingScreenDiv').style.display = 'initial';
+		document.getElementById("customLoadingScreenDiv").style.display = "initial";
 		return;
 	}
-	this._loadingDiv = document.createElement('div');
-	this._loadingDiv.id = 'customLoadingScreenDiv';
-	this._loadingDiv.innerHTML = 'loading';
+	this._loadingDiv = document.createElement("div");
+	this._loadingDiv.id = "customLoadingScreenDiv";
+	this._loadingDiv.innerHTML = "loading";
 	var customLoadingScreenCss = document.createElement('style');
 	customLoadingScreenCss.type = 'text/css';
 	customLoadingScreenCss.innerHTML = `
@@ -35,64 +35,70 @@ BABYLON.DefaultLoadingScreen.prototype.displayLoadingUI = function () {
 	`;
 	document.getElementsByTagName('head')[0].appendChild(customLoadingScreenCss);
 	this._resizeLoadingUI();
-	window.addEventListener('resize', this._resizeLoadingUI);
+	window.addEventListener("resize", this._resizeLoadingUI);
 	document.body.appendChild(this._loadingDiv);
 };
 
-BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function () {
-	document.getElementById('customLoadingScreenDiv').style.display = 'none';
-	console.log('scene is now loaded');
-};
+BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
+	document.getElementById("customLoadingScreenDiv").style.display = "none";
+	console.log("scene is now loaded");
+}
 
 var delayCreateScene = function () {
+	
 	engine.displayLoadingUI();
-	var scene = new BABYLON.Scene(engine);
+	var scene = new BABYLON.Scene(engine);  
 
 	BABYLON.SceneLoader.ImportMesh(
-		'',
-		'https://models.babylonjs.com/CornellBox/',
-		'cornellBox.glb',
+		"",
+		"https://models.babylonjs.com/CornellBox/",
+		"cornellBox.glb",
 		scene,
-		function () {
+		function () {          
 			scene.createDefaultCameraOrLight(true, true, true);
 			scene.createDefaultEnvironment();
 			scene.activeCamera.alpha = Math.PI / 2;
 			engine.hideLoadingUI();
 		}
 	);
-};
+}
 
-//Scene Creation
+
+//Scene Creation 
 
 var createScene = function () {
 	// Creates a basic Babylon Scene object (non-mesh)
 	var scene = new BABYLON.Scene(engine);
-
+	
 	// Create a camera
 	var camera = new BABYLON.ArcRotateCamera(
 		'camera',
 		2.372,
-		rotation_bottom_limit - rotation_top_limit,
+		(model.rotation_bottom_limit - model.rotation_top_limit),  //Top-Bottom Viewing Angel
 		0.5,
 		BABYLON.Vector3.Zero(),
 		scene
 	);
 
-	//var Largen;
-	//var Shorten;
-
-	camera.upperRadiusLimit = zoom_in_limit;
-	camera.lowerRadiusLimit = zoom_out_limit;
+	//Zoom In-Out
+	camera.upperRadiusLimit = model.zoom_in_limit;
+	camera.lowerRadiusLimit = model.zoom_out_limit;
 	camera.minZ = 0.01;
 
-	if (zoomEn === true) {
-		camera.wheelDeltaPercentage = 0.01;
-	} else {
-		camera.wheelDeltaPercentage = 0.0000000000000000001;
+	//Scroll Zoom
+	if (model.zoomEn===true){
+	camera.wheelDeltaPercentage = 0.01;
+	}
+	else {	
+	camera.wheelDeltaPercentage = 0.0000000000000000001;
 	}
 
 	// Attaches the camera to the canvas
 	camera.attachControl(canvas, true);
+    
+
+
+
 
 	// This creates a light, aiming 0,1,0 - to the sky (non-mesh)
 	var light = new BABYLON.HemisphericLight(
@@ -100,7 +106,8 @@ var createScene = function () {
 		new BABYLON.Vector3(0, 1, 0),
 		scene
 	);
-
+	
+	
 	// Use asset Manager to load the asset
 	var assetsManager = new BABYLON.AssetsManager(scene);
 	var meshTask = assetsManager.addMeshTask(
@@ -109,25 +116,10 @@ var createScene = function () {
 		'https://assets.babylonjs.com/meshes/',
 		'shoe_variants.glb'
 	);
+	
+	//Select Background Color
+	scene.clearColor = new BABYLON.Color3(model.bg1,model.bg2,model.bg3);
 
-	/*
-	var bg1 = new BABYLON.Color3(0.529, 0.808, 0.922); 
-    var bg2 = new BABYLON.Color3(0.5, 0, 0);
-    var bg3 = new BABYLON.Color3(0.502, 0.502, 0.502);
-    var bg4 = new BABYLON.Color3(0.255, 0.412, 0.882);
-    var bg5 = new BABYLON.Color3(0.18, 0.545, 0.341);
-    var bg6 = new BABYLON.Color3(1, 1, 0.92);
-	*/
-
-	scene.clearColor = new BABYLON.Color3(bg1, bg2, bg3);
-
-	//var shadowGenerator = new BABYLON.ShadowGenerator(1024, light);
-	//shadowGenerator.getShadowMap().renderList.push();
-	//shadowGenerator.useBlurExponentialShadowMap = true;
-	//shadowGenerator.useKernelBlur = true;
-	//shadowGenerator.blurKernel = 64;
-
-	//ground.receiveShadows = true;
 
 	meshTask.onSuccess = function (task) {
 		task.loadedMeshes[0].position = BABYLON.Vector3.Zero();
@@ -135,12 +127,13 @@ var createScene = function () {
 		scene.debugLayer.select(task.loadedMeshes[0], 'VARIANTS');
 	};
 
+	//Rotation Control
 	assetsManager.onFinish = function (tasks) {
 		engine.runRenderLoop(function () {
 			// Todo: add different controlls
-			if (autoR === true) {
+			if (model.autoR === true) {
 				camera.useAutoRotationBehavior = true;
-				camera.autoRotationBehavior.idleRotationSpeed = rot_Speed;
+				camera.autoRotationBehavior.idleRotationSpeed = model.rot_Speed;
 			} else {
 				camera.useAutoRotationBehavior = false;
 			}
